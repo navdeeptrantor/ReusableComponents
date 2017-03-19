@@ -1,0 +1,16 @@
+/*
+Following lines of code can be used for debugging
+You can use this macro in place of NSLog 
+Trace() prints method line of code and function name
+TraceF() prints method line of code and function name along with your message.
+*/
+
+#ifdef DEBUG
+#define Trace() NSLog(@"%s line %d", __PRETTY_FUNCTION__, __LINE__)
+#define TraceF(fmt, ...) NSLog(@"%s line %d: " fmt, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define Debug(fmt, ...) NSLog(fmt, ##__VA_ARGS__)
+#else
+#define Trace()
+#define TraceF(fmt, ...)
+#define Debug(fmt, ...)
+#endif
