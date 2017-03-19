@@ -18,3 +18,188 @@ TraceF() prints method line of code and function name along with your message.
 #define TraceF(fmt, ...)
 #define Debug(fmt, ...)
 #endif
+
+
+
+/* This method can be used to convert nsdictionary to json */
++(void)printJsonStringFor:(NSDictionary *)data {
+    if (data) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                           options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        
+        if (! jsonData) {
+            NSLog(@"Got an error: %@", error);
+        } else {
+            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            TraceF(@"Json string -- %@", jsonString);
+        }
+    }
+    
+}
+
+
+
+/* Get local time from UTC format date time */
++(NSString *)getLocalTime:(NSString *)strUTCDate{
+    NSString *format = @"yyyy-MM-dd'T'HH:mm:ssZ";//@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";//"2017-01-31T09:08:15+0000"
+    // Set up an NSDateFormatter for UTC time zone
+    NSDateFormatter* formatterUtc = [[NSDateFormatter alloc] init];
+    [formatterUtc setDateFormat:format];
+    //[formatterUtc setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [formatterUtc setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    
+    // Cast the input string to NSDate
+    NSDate* utcDate = [formatterUtc dateFromString:strUTCDate];
+    
+    // Set up an NSDateFormatter for the device's local time zone
+    NSDateFormatter* formatterLocal = [[NSDateFormatter alloc] init];
+    [formatterLocal setDateFormat:format];
+    [formatterLocal setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    // Create local NSDate with time zone difference
+    //NSDate* localDate = [formatterUtc dateFromString:[formatterLocal stringFromDate:utcDate]];
+    return [formatterLocal stringFromDate:utcDate];
+    
+}
+
+
+/* Get country code */
++ (NSDictionary *)getCountryCodeDictionary {
+    return [NSDictionary dictionaryWithObjectsAndKeys:@"972", @"IL",
+            @"93", @"AF", @"355", @"AL", @"213", @"DZ", @"1", @"AS",
+            @"376", @"AD", @"244", @"AO", @"1", @"AI", @"1", @"AG",
+            @"54", @"AR", @"374", @"AM", @"297", @"AW", @"61", @"AU",
+            @"43", @"AT", @"994", @"AZ", @"1", @"BS", @"973", @"BH",
+            @"880", @"BD", @"1", @"BB", @"375", @"BY", @"32", @"BE",
+            @"501", @"BZ", @"229", @"BJ", @"1", @"BM", @"975", @"BT",
+            @"387", @"BA", @"267", @"BW", @"55", @"BR", @"246", @"IO",
+            @"359", @"BG", @"226", @"BF", @"257", @"BI", @"855", @"KH",
+            @"237", @"CM", @"1", @"CA", @"238", @"CV", @"345", @"KY",
+            @"236", @"CF", @"235", @"TD", @"56", @"CL", @"86", @"CN",
+            @"61", @"CX", @"57", @"CO", @"269", @"KM", @"242", @"CG",
+            @"682", @"CK", @"506", @"CR", @"385", @"HR", @"53", @"CU",
+            @"537", @"CY", @"420", @"CZ", @"45", @"DK", @"253", @"DJ",
+            @"1", @"DM", @"1", @"DO", @"593", @"EC", @"20", @"EG",
+            @"503", @"SV", @"240", @"GQ", @"291", @"ER", @"372", @"EE",
+            @"251", @"ET", @"298", @"FO", @"679", @"FJ", @"358", @"FI",
+            @"33", @"FR", @"594", @"GF", @"689", @"PF", @"241", @"GA",
+            @"220", @"GM", @"995", @"GE", @"49", @"DE", @"233", @"GH",
+            @"350", @"GI", @"30", @"GR", @"299", @"GL", @"1", @"GD",
+            @"590", @"GP", @"1", @"GU", @"502", @"GT", @"224", @"GN",
+            @"245", @"GW", @"595", @"GY", @"509", @"HT", @"504", @"HN",
+            @"36", @"HU", @"354", @"IS", @"91", @"IN", @"62", @"ID",
+            @"964", @"IQ", @"353", @"IE", @"972", @"IL", @"39", @"IT",
+            @"1", @"JM", @"81", @"JP", @"962", @"JO", @"77", @"KZ",
+            @"254", @"KE", @"686", @"KI", @"965", @"KW", @"996", @"KG",
+            @"371", @"LV", @"961", @"LB", @"266", @"LS", @"231", @"LR",
+            @"423", @"LI", @"370", @"LT", @"352", @"LU", @"261", @"MG",
+            @"265", @"MW", @"60", @"MY", @"960", @"MV", @"223", @"ML",
+            @"356", @"MT", @"692", @"MH", @"596", @"MQ", @"222", @"MR",
+            @"230", @"MU", @"262", @"YT", @"52", @"MX", @"377", @"MC",
+            @"976", @"MN", @"382", @"ME", @"1", @"MS", @"212", @"MA",
+            @"95", @"MM", @"264", @"NA", @"674", @"NR", @"977", @"NP",
+            @"31", @"NL", @"599", @"AN", @"687", @"NC", @"64", @"NZ",
+            @"505", @"NI", @"227", @"NE", @"234", @"NG", @"683", @"NU",
+            @"672", @"NF", @"1", @"MP", @"47", @"NO", @"968", @"OM",
+            @"92", @"PK", @"680", @"PW", @"507", @"PA", @"675", @"PG",
+            @"595", @"PY", @"51", @"PE", @"63", @"PH", @"48", @"PL",
+            @"351", @"PT", @"1", @"PR", @"974", @"QA", @"40", @"RO",
+            @"250", @"RW", @"685", @"WS", @"378", @"SM", @"966", @"SA",
+            @"221", @"SN", @"381", @"RS", @"248", @"SC", @"232", @"SL",
+            @"65", @"SG", @"421", @"SK", @"386", @"SI", @"677", @"SB",
+            @"27", @"ZA", @"500", @"GS", @"34", @"ES", @"94", @"LK",
+            @"249", @"SD", @"597", @"SR", @"268", @"SZ", @"46", @"SE",
+            @"41", @"CH", @"992", @"TJ", @"66", @"TH", @"228", @"TG",
+            @"690", @"TK", @"676", @"TO", @"1", @"TT", @"216", @"TN",
+            @"90", @"TR", @"993", @"TM", @"1", @"TC", @"688", @"TV",
+            @"256", @"UG", @"380", @"UA", @"971", @"AE", @"44", @"GB",
+            @"1", @"US", @"598", @"UY", @"998", @"UZ", @"678", @"VU",
+            @"681", @"WF", @"967", @"YE", @"260", @"ZM", @"263", @"ZW",
+            @"591", @"BO", @"673", @"BN", @"61", @"CC", @"243", @"CD",
+            @"225", @"CI", @"500", @"FK", @"44", @"GG", @"379", @"VA",
+            @"852", @"HK", @"98", @"IR", @"44", @"IM", @"44", @"JE",
+            @"850", @"KP", @"82", @"KR", @"856", @"LA", @"218", @"LY",
+            @"853", @"MO", @"389", @"MK", @"691", @"FM", @"373", @"MD",
+            @"258", @"MZ", @"970", @"PS", @"872", @"PN", @"262", @"RE",
+            @"7", @"RU", @"590", @"BL", @"290", @"SH", @"1", @"KN",
+            @"1", @"LC", @"590", @"MF", @"508", @"PM", @"1", @"VC",
+            @"239", @"ST", @"252", @"SO", @"47", @"SJ", @"963", @"SY",
+            @"886", @"TW", @"255", @"TZ", @"670", @"TL", @"58", @"VE",
+            @"84", @"VN", @"1", @"VG", @"1", @"VI", nil];
+}
+
++(NSString *)getCountryCode{
+    NSString *countryIdentifier = [[NSLocale currentLocale] objectForKey: NSLocaleCountryCode];
+    TraceF(@"%@",[NSString stringWithFormat:@"+%@",[[self getCountryCodeDictionary] objectForKey:countryIdentifier]]);
+    NSString *code = [[self getCountryCodeDictionary] objectForKey:countryIdentifier];
+    
+    return code;
+}
+
+
+
+/* Use this method to get currency format, this example is for getting currency in $, Refer to this list for all possible locales: https://gist.github.com/ncreated/9934896 */
++(NSString *)getCurrencyFormatFor:(double)amount {
+    Trace();
+    @try {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+        NSString *numberAsString = [numberFormatter stringFromNumber:[NSNumber numberWithDouble:amount]];
+        return numberAsString;
+    }
+    @catch (NSException *exception) {
+        TraceF(@"Exception: %@",exception);
+    }
+}
+
+
+
+/* This method can be used to get random captcha string */
++(NSMutableDictionary *)getNewCaptcha{
+    
+    @try {
+        NSUInteger i1,i2,i3,i4,i5;
+        NSMutableDictionary *captchaDict = [NSMutableDictionary new];
+        
+        NSArray *ar1 = [[NSArray alloc]initWithObjects:@"0",@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"a",@"b",@"c",@"d",@"e",@"f",@"g",@"h",@"i",@"j",@"k",@"l",@"m",@"n",@"o",@"p",@"q",@"r",@"s",@"t",@"u",@"v",@"w",@"x",@"y",@"z",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+        
+        CGFloat hue = ( arc4random() % 256 / 256.0 );  //  0.0 to 1.0
+        CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;  //  0.5 to 1.0, away from white
+        CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;  //  0.5 to 1.0, away from black
+        UIColor *color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
+        
+        
+        
+        [captchaDict setValue:color forKey:@"CaptchaColor"];
+        
+        i1 = arc4random() % ( [ar1 count] - 1);
+        TraceF(@"RANDOM INDEX:%lu ",(unsigned long)i1);
+        
+        i2= arc4random() % ( [ar1 count] - 1);
+        TraceF(@"RANDOM INDEX:%lu ",(unsigned long)i2);
+        
+        i3 = arc4random() % ( [ar1 count] - 1);
+        TraceF(@"RANDOM INDEX:%lu ",(unsigned long)i3);
+        
+        i4 = arc4random() % ( [ar1 count] - 1);
+        TraceF(@"RANDOM INDEX:%lu ",(unsigned long)i4);
+        
+        i5 = arc4random() % ( [ar1 count] - 1);
+        TraceF(@"RANDOM INDEX:%lu ",(unsigned long)i5);
+        
+        
+        NSString *captchaString = [NSString stringWithFormat:@"%@%@%@%@%@",[ar1 objectAtIndex:i1],[ar1 objectAtIndex:i2],[ar1 objectAtIndex:i3],[ar1 objectAtIndex:i4],[ar1 objectAtIndex:i5]];
+        
+        TraceF(@" Captcha String : %@",captchaString);
+        
+       [captchaDict setValue:captchaString forKey:@"CaptchaString"];
+        return captchaDict;
+    }
+    @catch (NSException *exception) {
+        TraceF(@"%@",exception);
+    }
+    
+}
