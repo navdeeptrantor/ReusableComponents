@@ -22,15 +22,7 @@ extension String {
     var length: Int {
         return self.characters.count
     }
-    
-    var isMobileNumber:Bool {
-        if length == 10 {
-            return true
-        }
-        else {
-            return false
-        }
-    }
+   
     
     /* Password must be a minimum of 8 characters with at least one special character or numeric, at least one uppercase letter & at least one lower case letter. */
     
