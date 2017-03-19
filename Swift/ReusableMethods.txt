@@ -1,0 +1,20 @@
+/*
+Following lines of code can be used for debugging.
+You can use this macro in place of Print.
+Advantage of using this is that it only logs while in debugging mode and not while in production/release
+mode.
+Tip: Just copy and paste this line of code in *.pch file of ur Objective-C project
+
+It prints method name, line of code and function name along with your message.
+*/
+
+
+func printLog<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    #if DEBUG
+        let value = object()
+        let fileURL = NSURL(string: file)?.lastPathComponent ?? "Unknown file"
+        let queue = Thread.isMainThread ? "UI" : "BG"
+        
+        print("<\(queue)> \(fileURL) \(function)[\(line)]: " + String(reflecting: value))
+    #endif
+}
