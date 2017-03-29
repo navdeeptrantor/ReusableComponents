@@ -3,13 +3,12 @@
 This repo contains reusable components for iOS development.
 
 
-# Gitignore Tips
-For every ios app(having git repo) you should have .gitignore file, that can helps you reducing git conflicts. Just download Sample.gitignore file and copy it to your project root folder and rename it as ".gitignore".
-
-
 # Some helpful links
 - https://github.com/vsouza/awesome-ios
 - https://github.com/cjwirth/awesome-ios-ui
 
+
+# Note:
+There is always a room for improvement as nobody is perfect. So if you got any suggestion or want to contribute, please fork this repo and create pull request. Feel free to report any issue.
 
 # Stay Tuned.... Many more to come :)
